@@ -3,5 +3,6 @@
     "python.unitTest.pyTestEnabled": false,
     "python.unitTest.promptToConfigure": false,
     "python.unitTest.unittestEnabled": false,
-    "python.unitTest.nosetestsEnabled": false
+    "python.unitTest.nosetestsEnabled": false,
+    "code-runner.runInTerminal": true
 }
