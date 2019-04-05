@@ -3,11 +3,10 @@ from random import random
 import sympy
 import math
 def calculation(alpha,beta,m):
-    # m = 10 # 精度
-    a = np.zeros((m + 2,m + 2))
-    b = np.zeros((m + 2,m + 2))
+    a = np.zeros((m + 1,m + 1))
+    b = np.zeros((m + 1,m + 1))
     i = j = 1
-    shift = True
+    shift = True # shift 为 True 表明刚刚计算过 a 
     a[i,i] = beta[i]
     # print('a',i,i,a[i,i])
     while True:
@@ -32,10 +31,6 @@ def calculation(alpha,beta,m):
                 # print('a',i,j,a[i,j])
     a = a[1::,1::]
     b = b[1::,1::]
-    # np.delete(a,0,axis=0)
-    # np.delete(a,0,axis=1)
-    # np.delete(b,0,axis=0)
-    # np.delete(b,0,axis=1)
     return a,b
 
 def get_alpha(m):
@@ -56,11 +51,20 @@ def get_beta(m):
     beta = [j.subs(t,0) / math.factorial(i) for i,j in enumerate(beta)]
     return beta
 
-def get_gamma(m):
-    return get_beta(m)
-m = 40
+def get_theta(value,m):
+    theta = sympy.symbols('theta')
+    polynomial = [theta]
+    while len(polynomial) < m:
+        polynomial.append(polynomial[-1] * theta)
+    theta = [i.subs(theta,value) for i in polynomial]
+    return theta
+
+m = 40 # 精度
 alpha = get_alpha(m + 1)
 beta = get_beta(m + 1)
+theta = get_theta(1.1,m)
 a,b = calculation(alpha,beta,m)
-delay = b[0,:].sum()
+# print(np.shape(b))
+# print(b[0,:])
+delay = np.dot(b[0,:],theta)
 print(delay)
